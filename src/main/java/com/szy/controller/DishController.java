@@ -37,6 +37,14 @@ public class DishController {
     @PostMapping
     public R<String> save(@RequestBody DishDto dishDto){
         dishService.saveWithFlavor(dishDto);
+        //清理所有菜品的缓存数据
+        //Set keys = redisTemplate.keys("dish_*");
+        //redisTemplate.delete(keys);
+
+        //清理某个分类下面的菜品缓存数据
+        String key = "dish_" + dishDto.getCategoryId() + "_1";
+        redisTemplate.delete(key);
+
         return R.success("新增菜品成功");
     }
     //菜品信息分页查询
